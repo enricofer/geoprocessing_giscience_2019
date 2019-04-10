@@ -44,11 +44,7 @@ Un editor per programmatori leggero, multipiattaforma e open source è [GEANY](h
 
 In alternativo possono essere scaricati in rete altri ambienti integrati di sviluppo (IDE) più complessi, adatti a sviluppare applicazioni professionali:
 
-- [ATOM](https://atom.io/)
-
-- [BRACKETS](http://brackets.io/)
-
-- [VISUAL STUDIO CODE](https://code.visualstudio.com/)
+- [ATOM](https://atom.io/) - [BRACKETS](http://brackets.io/) - [VISUAL STUDIO CODE](https://code.visualstudio.com/)
 
 ---
 
@@ -85,7 +81,7 @@ Ai fini del corso viene utilizzato l'interprete di python  installato assieme a 
 
 ## CONSOLE
 
-![console](doc\console.png)
+![console](doc/console.png)
 
 QGIS integra python al suo interno, ed oltre ad esporre tutte le funzioni del programma, mette a disposizione una console alternativa, dove può essere eseguito codice python.
 
@@ -599,31 +595,29 @@ import time
 import math 
 
 def calcola_tempo_esecuzione(func): 
-	 
-	def funzione_incapsulante(*args, **kwargs): 
 
-		begin = time.time() 
-		valore_ottenuto = func(*args, **kwargs) #se la funzione ritorna un valore si conserva per restuirlo poi
-		end = time.time() 
-		print("Tempo totale di esecuzione della funzione", func.__name__, end - begin) 
+    def funzione_incapsulante(*args, **kwargs): 
+
+        begin = time.time() 
+        valore_ottenuto = func(*args, **kwargs) #se la funzione ritorna un valore si conserva per restuirlo poi
+        end = time.time() 
+        print("Tempo totale di esecuzione della funzione", func.__name__, end - begin) 
     return valore_ottenuto 
 
-	return funzione_incapsulante 
+    return funzione_incapsulante 
 
 
 @calcola_tempo_esecuzione
 def fattoriale(num): 
 
-	# imponiamo una pausa di due secondi per poter rendere evidente il tempo
-	time.sleep(2) 
-	print(math.factorial(num)) 
+    # imponiamo una pausa di due secondi per poter rendere evidente il tempo
+    time.sleep(2) 
+    print(math.factorial(num)) 
 
-fattoriale(10) 
-
+fattoriale(10)
 ```
 
 ---
-
 
 --
 
@@ -1321,4 +1315,3 @@ def mapCenter(value1,feature, parent):
   y = iface.mapCanvas().extent().center().y()
   return QgsGeometry.fromPointXY(QgsPointXY(x,y))
 ```
-

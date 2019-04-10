@@ -649,9 +649,7 @@ QGIS3 - windows
 [homedir]\AppData\roaming\QGIS3\python\plugins
 ```
 
-* directory alternativa QGIS_PLUGINPATH in opzioni - ambiente
-
-  ![pathconf](doc/pluginspathconf.png)
+* directory alternativa QGIS_PLUGINPATH in opzioni - ambiente![pathconf](doc/pluginspathconf.png)
 * installazione diretta da file zip (solo QGIS3)
 
 ---

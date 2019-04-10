@@ -3,6 +3,15 @@
         <link rel="stylesheet" href="https://revealjs.com/css/reveal.css">
         <link rel="stylesheet" href="https://revealjs.com/css/theme/black.css">
         <link rel="stylesheet" href="https://revealjs.com/lib/css/zenburn.css">
+        <script>
+		  if( window.location.search.match( /print-pdf/gi ) ) {
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = 'pdf.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		  }
+		</script>
         <style>
 
             .reveal .slides {

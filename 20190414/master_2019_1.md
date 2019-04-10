@@ -89,7 +89,7 @@ Ai fini del corso viene utilizzato l'interprete di python  installato assieme a 
 
 QGIS integra python al suo interno, ed oltre ad esporre tutte le funzioni del programma, mette a disposizione una console alternativa, dove può essere eseguito codice python.
 
-La console in QGIS può essere usato anche da riga di comando. L'importante è che alcune "variabili d'ambiente" siano opportunamente configurate. La distribuzione di QGIS contiene una riga di comando opportunamente configurata per l'utilizzo delle librerie OSGEO utilizzate dal programma
+La console in QGIS può essere usato anche da riga di comando. L'importante è che alcune "variabili d'ambiente" siano opportunamente configurate. La distribuzione di QGIS contiene una riga di comando opportunamente configurata per l'utilizzo delle librerie OSGEO utilizzate dal programma. Le istanze agli oggetti fondamentali di QGIS sono precaricati e direttamente accessibili, come per esempio QgisInterface accessibile da iface. Per vedere i nomi utilizzabili ispezionare la funzione `globals()` 
 
 ---
 
@@ -117,6 +117,12 @@ Nel nostro caso il parametro è unico ed è costituito da una stringa di testo d
 * funzioni, moduli e namespaces
 
 * programmazione ad oggetti
+
+#### THE ZEN OF PYTHON
+
+```python
+>>> import this
+```
 
 ---
 
@@ -273,7 +279,7 @@ type(anno)
 
 ## Liste
 
-una lista (list) e' un elenco ordinato di elementi
+una lista (list) e' un elenco ordinato di elementi, iterabile.
 
 ```python
 l = [3, 5, 4, 2, 1]
@@ -302,7 +308,7 @@ la stessa notazione è valida per ricavare sottostringhe
 
 ## Dizionari
 
-un dizionario (dict) è un insieme strutturato di dati
+un dizionario (dict) è un insieme strutturato di dati, iterabile.
 
 ```python
 d = {
@@ -374,17 +380,25 @@ print zone_letter
 ## Cicli
 
 ```python
+#for ELEMENTO in ITERABILE(LIST, DICT)
+
 for carattere in "abcdefg":
     print (carattere)
 
 for numero in [3, 5, 4, 2, 1]:
     print (numero)
 
+#while CONDIZIONE_VERA(TRUE)
+
 testo = "abcdefg"
 while testo:
     testo = testo[:-1]
     print (testo)
 ```
+
+un ciclo può essere interrotto con `break`
+
+e si può saltare un'iterazione con `continue`
 
 --
 
@@ -496,6 +510,8 @@ def test1():
 
 ## Moduli
 
+I moduli sono collezioni strutturate ed organizzate di codice python le cui definizioni possono essere importate all'interno di un programma
+
 ```python
 # Importa un modulo con chiamata ad una funzione contenuta
 import math
@@ -510,7 +526,7 @@ l'organizzazione modulare è una delle caratteristiche del linguaggio. I moduli 
 
 * predefiniti, già compresi nella [dotazione di base del linguaggio](https://docs.python.org/3/library/index.html)
 * esterni, contenuti nei path di sistema di Python (PATH, PYTHONPATH). Possono essere preimportati o [importati da internet](https://pypi.python.org/pypi?%3Aaction=browse) tramite pip/setuptools
-* definiti dall'utente in sottocartelle
+* definiti localmente dall'utente in altri files python
 
 --
 
@@ -532,7 +548,82 @@ Il comando provvede ad installare il pacchetto desiderato insieme alle sue dipen
 
 ---
 
-# Programmazione ad oggetti
+## Decoratori
+
+In Python le funzioni sono considerate esse stesse degli oggetti infatti:
+
+```
+>>> math.sin
+<built-in function sin>
+```
+
+e questo significa che:
+
+- Possono essere passate come argomenti ad altre funzioni
+
+- Possono essere definite all'interno di altre funzioni ed essere restituite come output di funzione
+
+I Decoratori sono strumenti molto utili in Python che permettono ai programmatori di modificare il comportamento di una funzione o di una classe. I decoratori consentono di incapsulare una funzione dentro l'altra modificando il comportamento della funzione incapsulata senza modificarla permanentemente.
+
+--
+
+### Sintassi dei decoratori
+
+Nel codice seguente mio_decorator è una funzione *callable* ovvero chiamabiel, invocabile, che aggiungerà l'esecuzione di qualche codice all'etto dell'esecuzione della funzione XYZ
+
+```python
+@mio_decorator
+    def XYZ():
+    print ( "XYZ" )
+```
+
+ed equivale alla seguente funzione
+
+```python
+def XYZ(): 
+
+    print("XYZ") 
+
+hello_decorator = mio_decorator(hello_decorator)
+```
+
+--
+
+Per esempio con un decoratore si può calcolare il tempo di esecuzione di una funzione:
+
+Attenzione il nome riservato `args `restituisce la lista degli argomenti passati a quella funzione e  `*` trasforma una lista in una sequenza di argomenti mentre il nome riservato `kwargs `restituisce la lista degli argomenti opzionali (*key-worded arguments*)passati a quella funzione e `**` trasforma una lista in una sequenza di argomenti opzionali. e la costruzione `*args, **kwargs` significa tutti gli argomenti che una funzione potrebbe avere
+
+```
+# importing libraries 
+import time 
+import math 
+
+def calcola_tempo_esecuzione(func): 
+	 
+	def funzione_incapsulante(*args, **kwargs): 
+
+		begin = time.time() 
+		valore_ottenuto = func(*args, **kwargs) #se la funzione ritorna un valore si conserva per restuirlo poi
+		end = time.time() 
+		print("Tempo totale di esecuzione della funzione", func.__name__, end - begin) 
+    return valore_ottenuto 
+
+	return funzione_incapsulante 
+
+
+@calcola_tempo_esecuzione
+def fattoriale(num): 
+
+	# imponiamo una pausa di due secondi per poter rendere evidente il tempo
+	time.sleep(2) 
+	print(math.factorial(num)) 
+
+fattoriale(10) 
+
+```
+
+---
+
 
 --
 
@@ -748,7 +839,7 @@ Ut laoreet sem pellentesque ipsum rutrum consequat. Nunc iaculis tempor aliquet.
 Fusce imperdiet pharetra tellus, ut commodo lacus gravida et.
 '''
 
-destinazione = r"C:\Users\ferregutie\Downloads"
+destinazione = r"C:\temp\"
 
 text_file = open(os.path.join(destinazione, 'mio_file.txt'), 'w')
 text_file.write(testo)
@@ -773,14 +864,14 @@ lettura di una stringa da un file di testo
 
 import os
 #from esercitazione2 import destinazione
-destinazione = r"C:\Users\ferregutie\Downloads"
+destinazione = r"C:\temp\"
 
 
 text_file = open(os.path.join(destinazione, 'mio_file.txt'), 'r')
 testo = text_file.read()
 text_file.close()
 
-print (testo
+print (testo)
 ```
 
 [esercitazione3.py](py/esercitazione3.py)
@@ -921,7 +1012,7 @@ il modulo di collegamento (*bindings*) si chiama PyQt e può essere importato in
 ## PyQGIS - classi fondamentali
 
 [documentazione API in C++](https://qgis.org/api)
-[documentazione API in python](http://python.qgis.org/api)
+[documentazione API in python](https://qgis.org/pyqgis/)
 
 * [QgisInterface](https://qgis.org/api/classQgisInterface.html): riferimenti dell'interfaccia utente:
 * [QgsProject.instance()](https://qgis.org/api/classQgisInterface.html): è un oggetto singolare (singleton) e gestisce l'oggetto progetto corrente. incorpora [QgsMapLayerRegistry](https://qgis.org/api/2.18/classQgsMapLayerRegistry.html) di QGIS2
@@ -941,7 +1032,7 @@ il modulo di collegamento (*bindings*) si chiama PyQt e può essere importato in
 
 QGIS è programmato in modo modulare in C++ ed espone classi e metodi di funzionamento in PyQGIS
 
-```
+```python
 # iface è l'oggetto principale di QGIS da cui derivano
 # tutti gli altri oggetti che ne permettono il funzionamento
 # è un "singleton" un oggetto con unica istanza
@@ -991,7 +1082,7 @@ layer = iface.activeLayer() #layer correntemente attivo sulla legenda
 #PROPRIETA' DEL LAYER
 print (layer.extent()) #estensioni del layer
 
-for field in layer.pendingFields():
+for field in layer.fields():
     print (field.name(), field.typeName()) #stampa dei campi del layer
 
 #ITERAZIONE
@@ -1020,12 +1111,12 @@ feature.id() #identificativo interno univoco ($id in espressioni)
 
 #CREAZIONE
 feature = QgsFeature() #creazione di una feature vuota senza definizioni dei campi #bisogna crearli ex novo
-feature = QgsFeature(layer.pendingFields()) #creazione di una feature contente i campi del layer
+feature = QgsFeature(layer.fields()) #creazione di una feature contente i campi del layer
 
 #MODIFICA
 feature.setAttribute('area', 100.0) #settaggio del campo 'area' con il valore 100.0
 feature.setAttribute(4, 100.0) #settaggio del quarto campo con il valore 100.0
-feature.setGeometry(QgsGeometry.fromPoint(QgsPoint(123, 456)))
+feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(123, 456)))
 ```
 
 --
@@ -1047,7 +1138,7 @@ layer.changeGeometry(fid, geometry)
 layer.changeAttributeValue(fid, fieldIndex, value)
 oppure una volta ottenuta la feature desiderata
 feature.setAttribute('area', 100.0)
-feature.setGeometry(QgsGeometry.fromPoint(QgsPoint(123, 456)))
+feature.setGeometry(QgsGeometry.fromPointXY(QgsPointXY(123, 456)))
 
 #AGGIUNTA ATTRIBUTI
 layer.addAttribute(QgsField("mytext", QVariant.String))
@@ -1231,300 +1322,3 @@ def mapCenter(value1,feature, parent):
   return QgsGeometry.fromPointXY(QgsPointXY(x,y))
 ```
 
----
-
-## script di processing
-
-[documentazione ufficiale](https://docs.qgis.org/2.8/en/docs/user_manual/processing/scripts.html#writing-new-processing-algorithms-as-python-scripts)
-[tutorial per QGIS2](http://www.qgistutorials.com/it/docs/processing_python_scripts.html)
-
-![processing](doc/processing.png)
-
---
-
-## Dai Modelli agli script di Processing
-
-i modelli di processing possono venire esportati come script in python soccessivamente modificabili:
-
-```python
-##Points2Polygon=name
-##TABLEFIELD_GROUPBY=fieldVECTORLAYER_POINTSLAYER
-##TABLEFIELD_ORDERBY=fieldVECTORLAYER_POINTSLAYER
-##VECTORLAYER_POINTSLAYER=vector
-##mypolygons=output vector
-outputs_QGISPOINTSTOPATH_1=processing.runalg('qgis:pointstopath', VECTORLAYER_POINTSLAYER,TABLEFIELD_GROUPBY,TABLEFIELD_ORDERBY,None,None,None)
-outputs_QGISLINESTOPOLYGONS_1=processing.runalg('qgis:linestopolygons', outputs_QGISPOINTSTOPATH_1['OUTPUT_LINES'],mypolygons)
-```
-
-Modelli e Script di Processing possono essere importati dal repository di QGIS
-
---
-
-## creazione di un nuovo layer dalle feature selezionate
-
-In QGIS3 il framework è stato completamente riscritto in C++ per esigenze prestazionali e per consentire l'esecuzione in background. Però l'API è completamente cambiata, più complessa, poco documentata e soggetta a futuri cambiamenti. Quindi facciamo riferimento per processing ancora al framework di QGIS2
-
-```python
-##Vector=group
-##input=vector
-##output=output vector
-
-from qgis.core import *
-from processing.tools.vector import VectorWriter
-
-vectorLayer = processing.getObject(input)
-
-provider = vectorLayer.dataProvider()
-
-writer = VectorWriter(output, None, vectorLayer.pendingFields(),
-                      provider.geometryType(), vectorLayer.crs())
-
-features = processing.features(vectorLayer)
-for feat in features:
-    writer.addFeature(feat)
-
-del writer
-```
-
---
-
-[dtm](py/antelao.tif)
-[06-rasterProcessing.py](doc/06-rasterProcessing.py)
-
-```python
-##dtm=raster
-##input=vector
-##output=output vector
-
-from PyQt4.QtCore import QVariant
-from qgis.core import *
-from processing.tools.vector import VectorWriter
-
-vectorLayer = processing.getObject(input)
-dtmLayer = processing.getObject(dtm)
-
-fields=QgsFields()
-fields.append(QgsField('elevation', QVariant.Double))
-fields.append(QgsField('id_poly', QVariant.Int))
-
-pointSamplewriter = VectorWriter(output, None, fields,
-                      QgsWKBTypes.Point, vectorLayer.crs())
-
-features = processing.features(vectorLayer)
-for feat in features:
-    for point in feat.geometry().asPolyline():
-        elevFeat = QgsFeature(fields)
-        elevValue = dtmLayer.dataProvider().identify(point, QgsRaster.IdentifyFormatValue).results()[1]
-        elevFeat['elevation'] = elevValue
-        elevFeat['id_poly'] = feat.id()
-        elevGeom = QgsGeometry.fromPoint(point)
-        elevFeat.setGeometry(elevGeom)
-        pointSamplewriter.addFeature(elevFeat)
-
-del pointSamplewriter
-```
-
---
-
-script di processing modificato nella lezione 3 per misurare i punti lungo le polilineee. attenti a non definire misure <= 0
-[07_raster_proc_QGIS3.py](doc/08_raster_proc_QGIS3.py)
-
-```python
-##dtm=raster
-##input=vector
-##measure=number 50
-##output=output vector
-
-from PyQt4.QtCore import QVariant
-from qgis.core import *
-from processing.tools.vector import VectorWriter
-
-vectorLayer = processing.getObject(input)
-dtmLayer = processing.getObject(dtm)
-measureStep = measure
-
-fields=QgsFields()
-fields.append(QgsField('id_poly', QVariant.Int))
-fields.append(QgsField('elevation', QVariant.Double))
-fields.append(QgsField('step', QVariant.Double))
-
-pointSamplewriter = VectorWriter(output, None, fields,
-                      QgsWKBTypes.Point, vectorLayer.crs())
-
-features = processing.features(vectorLayer)
-for feat in features:
-    currentLen = 0
-    while currentLen < feat.geometry().length():
-        point = feat.geometry().interpolate(currentLen).asPoint()
-        elevFeat = QgsFeature(fields)
-        elevValue = dtmLayer.dataProvider().identify(point, QgsRaster.IdentifyFormatValue).results()[1]
-        elevFeat['elevation'] = elevValue
-        elevFeat['step'] = currentLen
-        elevFeat['id_poly'] = feat.id()
-        elevGeom = QgsGeometry.fromPoint(point)
-        elevFeat.setGeometry(elevGeom)
-        pointSamplewriter.addFeature(elevFeat)
-        currentLen += measureStep
-
-del pointSamplewriter
-```
-
---
-
-script di processing precedente modificato per il funzionamento in QGIS3
-[08_raster_proc_QGIS3.py](doc/08_raster_proc_QGIS3.py)
-
-
-
---
-
-```python
-# -*- coding: utf-8 -*-
-
-from qgis.processing import alg
-
-from PyQt5.QtCore import QCoreApplication, QVariant
-from qgis.core import (QgsProcessing,
-                       QgsFeatureSink,
-                       QgsFields,QgsField,QgsFeature,QgsGeometry, QgsWkbTypes, QgsRaster)
-
-@alg(name="measure_Elevation_along_lines", label="Measure DTM elevation along lines", group="customscripts", group_label=alg.tr("Custom Scripts"))
-@alg.input(type=alg.MAPLAYER, name='DTM_LAYER', label="Layer DTM")
-@alg.input(type=alg.SOURCE, name='INPUT_LAYER', label="Input layer", types=[QgsProcessing.TypeVectorLine])
-@alg.input(type=alg.DISTANCE, name="MEASURE_VALUE", label="Measure step size", default=50.0) 
-@alg.input(type=alg.SINK, name="OUTPUT_LAYER", label="Output layer")
-@alg.output(type=str, name="OUT", label="Output")
-def processAlgorithm(instance, parameters, context, feedback, inputs):
-	"""
-	Algoritm to extract elevation on DTM from linestring paths at specified measure step
-	"""
-	
-	
-	vectorLayer = instance.parameterAsSource(parameters, "INPUT_LAYER", context)
-	dtmLayer = instance.parameterAsRasterLayer(parameters, "DTM_LAYER", context)
-	measureStep = instance.parameterAsInt (parameters, "MEASURE_VALUE", context)
-
-	
-	fields=QgsFields()
-	fields.append(QgsField('id_poly', QVariant.Int))
-	fields.append(QgsField('elevation', QVariant.Double))
-	fields.append(QgsField('step', QVariant.Double))
-
-
-	(sink, dest_id) = instance.parameterAsSink(parameters, "OUTPUT_LAYER", context, fields, QgsWkbTypes.Point, vectorLayer.sourceCrs())
-	
-	
-	features = vectorLayer.getFeatures() #QgsProcessingUtils.getFeatures(vectorLayer, context)
-	for feat in features:
-		currentLen = 0
-		while currentLen < feat.geometry().length():
-			point = feat.geometry().interpolate(currentLen).asPoint()
-			elevFeat = QgsFeature(fields)
-			elevValue = dtmLayer.dataProvider().identify(point, QgsRaster.IdentifyFormatValue).results()[1]
-			elevFeat['elevation'] = elevValue
-			elevFeat['step'] = currentLen
-			elevFeat['id_poly'] = feat.id()
-			elevGeom = QgsGeometry.fromPointXY(point)
-			elevFeat.setGeometry(elevGeom)
-			sink.addFeature(elevFeat, QgsFeatureSink.FastInsert)
-			currentLen += measureStep
-	
-	return {"OUTPUT_LAYER": dest_id,}
-        
-
-```
-
---
-
-script di processing precedente modificato per l'utilizzo del nuovo style con decoratori in QGIS3 [09_raster_proc_QGIS3_decorators.py](doc/08_raster_proc_QGIS3_decorators.py)
-
-```
-
-```
-
---
-
-
-
-## creazione di un grafo origine/destinazione in QGIS2
-
-```python
-##Linee=vector line
-##nodi=output vector
-##grafo=output vector
-
-from qgis.core import QgsGeometry, QgsField, QgsFeature, QGis
-from PyQt4.QtCore import QVariant
-from processing.tools.vector import VectorWriter
-
-def aggiungi_nodo(nuovo_nodo):
-    for i,nodo in enumerate(lista_nodi):
-        if nodo.compare(nuovo_nodo):
-            return i
-    lista_nodi.append(nuovo_nodo)
-    return len(lista_nodi)-1
-
-linee_layer = processing.getObject(Linee)
-
-grafo_fields = [
-    QgsField("rif_id", QVariant.Int),
-    QgsField("in_id", QVariant.Int),
-    QgsField("out_id", QVariant.Int)
-]
-grafo_writer = VectorWriter(grafo, None, grafo_fields, QGis.WKBMultiLineString, linee_layer.crs())
-
-nodi_fields = [QgsField("nodo_id", QVariant.Int)]
-nodi_writer = VectorWriter(nodi, None, nodi_fields, QGis.WKBMultiPoint, linee_layer.crs())
-
-i = 0
-n = linee_layer.featureCount()
-lista_nodi = []
-progress.setText("Individuazione dei vertici degli archi del grafo ...")
-
-for k,feature in enumerate(processing.features(linee_layer)):
-    progress.setPercentage(int(100*i/n))
-    i += 1
-    lista_vertici = feature.geometry().asPolyline()
-    grafo_feature = QgsFeature()
-    attributi =[feature.id()]
-    grafo_feature.setGeometry(feature.geometry())
-    for campo, estremo in ({1:lista_vertici[0],2:lista_vertici[-1]}).items():
-        id_nodo = aggiungi_nodo(estremo)
-        attributi.append(id_nodo)
-    grafo_feature.setAttributes(attributi)
-    grafo_writer.addFeature(grafo_feature)
-
-i = 0
-n = len(lista_nodi)
-progress.setText("Creazione dei nodi ...")
-
-for i, nodo in enumerate(lista_nodi):
-    progress.setPercentage(int(100*i/n))
-    nodo_feature = QgsFeature()
-    nodo_feature.setAttributes([i])
-    nodo_feature.setGeometry(QgsGeometry.fromPoint(nodo))
-    nodi_writer.addFeature(nodo_feature)
-
-del nodi_writer
-del grafo_writer
-
-`
-```
-
---
-
-## uso del framework processing
-
-[documentazione ufficiale] (https://docs.qgis.org/2.18/en/docs/user_manual/processing/console.html)
-
-```python
->>> import processing
-# eseguire un algoritmo
->>> processing.runalg('nome algoritmo', par1, par2, ..., parN)
-
-# lista degli algoritmi disponibili
->>> processing.alglist()
-
-# lista dei parametri necessari per runalg
->>> processing.alghelp('nome algoritmo')
-```

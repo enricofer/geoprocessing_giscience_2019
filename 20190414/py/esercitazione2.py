@@ -11,7 +11,7 @@ Ut laoreet sem pellentesque ipsum rutrum consequat. Nunc iaculis tempor aliquet.
 Fusce imperdiet pharetra tellus, ut commodo lacus gravida et.
 '''
 
-destinazione = r"C:\Users\ferregutie\Downloads"
+destinazione = r"C:\Users\paolo\Documenti"
 
 text_file = open(os.path.join(destinazione, 'mio_file.txt'), 'w')
 text_file.write(testo)

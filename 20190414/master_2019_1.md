@@ -32,7 +32,7 @@ Python è un linguaggio di programmazione potente e divertente, che trova utiliz
 ## Riferimenti
 
 * [Cheatsheet - riferimento rapido python 3.5](https://perso.limsi.fr/pointal/_media/python:cours:mementopython3-english.pdf)
-* [Python per esempi](https://github-production-release-asset-2e65be.s3.amazonaws.com/29447438/1da4d7ca-6837-11e6-8ab3-ae7821a7032a?X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAIWNJYAX4CSVEH53A%2F20170615%2Fus-east-1%2Fs3%2Faws4_request&X-Amz-Date=20170615T063202Z&X-Amz-Expires=300&X-Amz-Signature=504b5df4c21540c43f13c9fe6bd01a866031acbffff1f6827bf9fb8d6dbf49a7&X-Amz-SignedHeaders=host&actor_id=7544963&response-content-disposition=attachment%3B%20filename%3Dbeginners_python_cheat_sheet_pcc_all.pdf&response-content-type=application%2Foctet-stream )
+* [The Hitchhiker’s Guide to Python](https://docs.python-guide.org/ )
 
 ---
 
@@ -400,6 +400,12 @@ e si può saltare un'iterazione con `continue`
 
 ## Gestione delle eccezioni
 
+In python esiston due tipi di errori:
+
+- errori di sintassi; che impediscono l'esecuzione di un programma
+
+- errori *runtime* o eccezioni; che avvengono durante lo svolgimento del programma e che possono interrompere il flusso dello stesso o essere gestite per isolare il codice che potenzialmente potrebbe generarle ed adottare strategie alternative mirate.
+
 ```python
 try:
     print (100/0) #provoca ZeroDivisionError: integer division or modulo by zero
@@ -420,14 +426,15 @@ except Exception as e:
 
 ## Funzioni esistenti (o predefinite)
 
+le funzioni in python sono delle azioni di trattamento dei dati definite da un nome e degli argomenti da trattare separati da virgole e racchiusi tra parentesi. Le funzioni possono o meno restituire un valore di risposta.
+
 ```python
 # Funzioni esistenti (o predefinite)
 print("stampa il numero",4)
 sorted([3, 5, 4, 2, 1])
 len(l1 + l2)
 type(a)
-
-...
+globals()
 ```
 
 --
@@ -454,8 +461,11 @@ ZonaUtm(11.55,45)   # 32
 
 ## Namespaces
 
-```python
+ogni oggetto in python *vive* all'interno di un blocco predeterminato di istruzioni, chiamato *namespace*e che idealmente corrisponde al livello di indentazione nel quale viene creato l'oggetto riferito agli oggetti *def* e *class*
 
+All'interno di un programma possono coesistere numerosi namespaces separati tra loro in cui i nomi degli oggetti non sono in conflitto. Esiste almeno un namespace globale che contiene gli oggetti richiamabili da ogni parte del programma
+
+```python
 def funzione1():
     var = 100
     print (var)
@@ -472,11 +482,9 @@ output:
 100
 ```
 
-verifica dei namespaces:
-
 ```python
 globals() #simboli accessibili globalmente
-locals() #simboli accessibili localmente (all'interno di una funzionec)
+locals() #simboli privati accessibili localmente (all'interno di una funzione)
 ```
 
 --
@@ -484,22 +492,28 @@ locals() #simboli accessibili localmente (all'interno di una funzionec)
 ## test sui namespaces
 
 ```python
-global a
 a = 0
-test1()
+b = 1
+c = 2
+
+def stampa (a, b, c):
+    print ('a:',a,'b:',b,'c:',c)
 
 def test1():
 
-    def test2():
-        c = 2
-        print ('a',a)
-        print ('b',b)
-        print ('c',c)
+    def test2(a,b,c):
+        a += 1
+        b += 1
+        c += 1
+        stampa(a, b, c)
 
-    b = 1
+    a = 6
+    b = 5
+    stampa(a, b, c)
+    test2(a, b, c)
 
-    print ('b',b)
-    test2()
+test1()
+stampa(a, b, c)
 ```
 
 --
@@ -515,7 +529,8 @@ math.floor(10.6)
 
 # Importa singoli elementi da un modulo
 from os import path
-path.join(r'C:\Users', 'Matt')
+path.join('C:', 'Utenti', 'paolo', 'documenti')
+'C:/Utenti/paolo/documenti'
 ```
 
 l'organizzazione modulare è una delle caratteristiche del linguaggio. I moduli possono essere:
@@ -565,7 +580,7 @@ I Decoratori sono strumenti molto utili in Python che permettono ai programmator
 
 ### Sintassi dei decoratori
 
-Nel codice seguente mio_decorator è una funzione *callable* ovvero chiamabiel, invocabile, che aggiungerà l'esecuzione di qualche codice all'etto dell'esecuzione della funzione XYZ
+Nel codice seguente mio_decorator è una funzione *callable* ovvero chiamabile, invocabile, che aggiungerà l'esecuzione di qualche codice all'etto dell'esecuzione della funzione XYZ
 
 ```python
 @mio_decorator
@@ -577,7 +592,6 @@ ed equivale alla seguente funzione
 
 ```python
 def XYZ(): 
-
     print("XYZ") 
 
 hello_decorator = mio_decorator(hello_decorator)
@@ -589,7 +603,7 @@ Per esempio con un decoratore si può calcolare il tempo di esecuzione di una fu
 
 Attenzione il nome riservato `args `restituisce la lista degli argomenti passati a quella funzione e  `*` trasforma una lista in una sequenza di argomenti mentre il nome riservato `kwargs `restituisce la lista degli argomenti opzionali (*key-worded arguments*)passati a quella funzione e `**` trasforma una lista in una sequenza di argomenti opzionali. e la costruzione `*args, **kwargs` significa tutti gli argomenti che una funzione potrebbe avere
 
-```
+```python
 # importing libraries 
 import time 
 import math 
@@ -618,8 +632,6 @@ fattoriale(10)
 ```
 
 ---
-
---
 
 # Classi ed istanze
 
@@ -651,13 +663,13 @@ class rettangolo:
       self.l = l
       self.h = h
 
-   def area(self)
+   def area(self):
       return self.l*self.h
 
-   def perimetro(self)
+   def perimetro(self):
       return(self.l+self.h)*2
 
-   def scala(self, scala)
+   def scala(self, scala):
       self.l = self.l*scala
       self.h = self.h*scala
 ```
@@ -685,44 +697,6 @@ Una volta definita una classe è possibile .....
 
 ```python
 class stanza:
-    def __init__(self, lung, larg)
-        self.lung = lung
-        self.larg = larg
-        self.nome = "stanza"
-
-    def nome(self):
-        return self.nome
-
-    def area(self):
-        return self.lung * self.larg
-
-class cucina(stanza):
-    def __init__(self, lung, larg)
-        super().__init__(lung, larg)
-        self.nome = "cucina"
-
-class camera(stanza):
-    def __init__(self, lung, larg, abitante)
-        super().__init__(lung, larg)
-        self.nome = "bagno"
-        self.abitante = abitante
-
-class edificio:
-    def __init__(self, stanze)
-        self.stanze = stanze
-
-    def area_tot(self):
-        area = 0
-        for stanza in self.stanze:
-            area += stanza.area()
-        return area
-
-    def abitanti(self):
-        ab = 0
-        for stanza in stanze:
-            if hasattr(stanza,'abitante')
-                ab += 1
-        return ab
 ```
 
 --
@@ -821,23 +795,6 @@ scrittura e lettura di un file di testo
 
 ```python
 '''
-CORSO DI GEOPROCESSING - MASTER IN GISSCIENCE
-salvataggio di una stringa ad un file di testo
-'''
-
-import os
-
-testo = '''
-Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Ut laoreet sem pellentesque ipsum rutrum consequat. Nunc iaculis tempor aliquet.
-Fusce imperdiet pharetra tellus, ut commodo lacus gravida et.
-'''
-
-destinazione = r"C:\temp\"
-
-text_file = open(os.path.join(destinazione, 'mio_file.txt'), 'w')
-text_file.write(testo)
-text_file.close()
 ```
 
 [esercitazione2.py](py/esercitazione2.py)
@@ -970,11 +927,17 @@ for nome_funzione in ['lunghezza', "lunghezza_elegante", "lunghezza_pitonica"]:
 
 [esercitazione5.py](py/esercitazione5.py)
 
-# PyQt e PyQGIS
+---
+
+# PYQGIS
+
+--
+
+## Python in QGIS
 
 QGIS è un'applicazione open source multipiattaforma (è disponibile per tutti i principali sistemi operativi) costruita per mezzo del framework di programmazione Qt
 QGIS espone per mezzo di un'interfaccia di programmazione (API) le classi ed i metodi di funzionamento,
-Qt e QGIS dispongono di librerie di collegamento a PYTHON (*bindings*) denominate PyQt e PyQGIS che consentono il controllo e la propgrammazione dell'applicazione per mezzo di codice interpretato in python
+Qt e QGIS dispongono di librerie di collegamento a PYTHON (*bindings*) denominate PyQt e PyQGIS che consentono il controllo e la personalizzazione dell'applicazione per mezzo di codice interpretato in python
 
 * QGIS2
   * Python 2.7/Qt 4
@@ -1005,11 +968,10 @@ il modulo di collegamento (*bindings*) si chiama PyQt e può essere importato in
 
 ## PyQGIS - classi fondamentali
 
-[documentazione API in C++](https://qgis.org/api)
-[documentazione API in python](https://qgis.org/pyqgis/)
+[API in C++](https://qgis.org/api) - [API in python](https://qgis.org/pyqgis/) - [pyqgis per esempi](https://github.com/webgeodatavore/pyqgis-samples)
 
 * [QgisInterface](https://qgis.org/api/classQgisInterface.html): riferimenti dell'interfaccia utente:
-* [QgsProject.instance()](https://qgis.org/api/classQgisInterface.html): è un oggetto singolare (singleton) e gestisce l'oggetto progetto corrente. incorpora [QgsMapLayerRegistry](https://qgis.org/api/2.18/classQgsMapLayerRegistry.html) di QGIS2
+* [QgsProject.instance()](https://qgis.org/api/classQgisInterface.html):  gestisce l'oggetto progetto corrente.
 * [QgsMapCanvas()](https://qgis.org/api/classQgsMapCanvas.html): è accessibile da QgisInterface().mapCanvas() e gestisce la visualizzazione dei layer: sistemi di riferimento, zoom/pan, mapTools etc...
 * [QgsLayerInterface()](http://qgis.org/api/2.18/classQgsLegendInterface.html): accessibile da QgisInterface().layerInterface() gestisce la legenda dei layers
 * [QgsMapLayer()](https://qgis.org/api/classQgsMapLayer.html): si articola in QgsVectorLayer() e QgsRasterLayer() e gestisce la manipolazione dei layers
@@ -1064,7 +1026,7 @@ QgsProject.instance().addMapLayer(vectorLayer) #QgsMapLayerRegistry
 
 --
 
-## Layers Vettoriali - acceso alle features
+## Layers Vettoriali - accesso alle features
 
 [Uso dei layers vettoriali](https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/vector.html#)
 

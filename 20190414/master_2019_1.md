@@ -171,19 +171,19 @@ int(34.354)
 'Python è "divertente"'
 
 # Stringhe multi-linea
-print """Questa stringa
+print ("""Questa stringa
 è suddivisa in
-varie righe"""
+varie righe""")
 
 # Caratteri speciale come a capo, la tabulazione o la barra inversa,
 # possono essere inseriti per mezzo di una sequenza di escape che inizia
 # con una barra inversa "\"
 
 print "Questa stringa\nviene stampata\nin tre righe"
-print "C:\\Users\\enrico"
+print ("C:\\Users\\enrico")
 
 # Si può usare una stringa grezza tralasciando le sequenze di escape
-print r"C:\\Users\\enrico"
+print ()r"C:\Users\enrico")
 
 #Uso del set di caratteri esteso (unicode - UTF8) (Python 2)
 print (u"questo è qgis")
@@ -202,15 +202,15 @@ c = 172
 d = 8.5676776
 
 # concatenazione
-print ("il mio cognome è " + b)
-print ("mi chiamo "+a+" "+b+" alto "+str(c)" cm ed ho percorso "+str(d)+" km")
+print (u"il mio cognome è " + b)
+print ("mi chiamo "+a+" "+b+" alto "+str(c)+" cm ed ho percorso "+str(d)+" km")
 
 # metodo "vecchio"
-print ("il mio cognome è %s" % b)
+print (u"il mio cognome è %s" % b)
 print ("mi chiamo %s %s alto %d cm ed ho percorso %.1f km" % (a,b,c,d))
 
 #metodo "nuovo"
-print ("mi chiamo {0} {1} alto {:d} cm ed ho percorso {:.1f} km".format(a,b,c,d))
+print ("mi chiamo {1} {0} alto {2:d} cm ed ho percorso {3:.1f} km".format(a,b,c,d))
 ```
 
 --
@@ -444,7 +444,7 @@ globals()
 ```python
 def ZonaUtm(longitudine, latitudine):
     numero_zona = ((longitudine + 180) / 6) % 60 + 1
-    if latitude >= 0:
+    if latitudine >= 0:
         lettera_zona = 'N'
     else:
         lettera_zona = 'S'
@@ -910,6 +910,7 @@ def lunghezza_elegante(segmento):
     return lunghezza_tot
 
 def lunghezza_pitonica(segmento):
+    print (zip(segmento[:-1],segmento[1:])
     diffpt = lambda p: (p[0][0]-p[1][0], p[0][1]-p[1][1])
     lista_diff = map (diffpt, zip(segmento[:-1],segmento[1:]))
     lunghezza_tot = sum(math.hypot(*d) for d in lista_diff)
@@ -1277,3 +1278,18 @@ def mapCenter(value1,feature, parent):
   y = iface.mapCanvas().extent().center().y()
   return QgsGeometry.fromPointXY(QgsPointXY(x,y))
 ```
+
+# ESERCITAZIONE PER CASA
+
+Scrivere una procedura per scansionare il contenuto di una cartella e caricare tutti gli shapefiles in essa contenuti in un unico archivio geopackage
+Spunti per lo svolgimento
+
+- scansionare il contenuto di una directory con [os.listdir](https://code-maven.com/listing-a-directory-using-python)
+- estrarre l'estensione da un nome del file con [os.path.splitext](https://stackoverflow.com/questions/30438268/using-os-path-splitext-to-seperate-filename-and-extension)
+- controllare se l'estensione è .shp con if/then e nele caso
+  - utilizzare la funzione [os.system](https://docs.python.org/3/library/os.html#os.system) o [subprocess.call](https://docs.python.org/3/library/subprocess.html#subprocess.call) per eseguire il comando [*ogr2ogr*](https://www.gdal.org/ogr2ogr.html) per la conversione degli shapefiles:
+    - `ogr2ogr -append -f GPKG archivio.gpkg file.shp`
+
+*ogr2ogr* è un comando contenuto nella libreria GDAL che consente di manipolare e convertire files vettoriali da riga di comando
+
+Per difficoltà o chiarimenti postare nella sezione [ISSUES](https://github.com/enricofer/geoprocessing_giscience_2019/issues) del repository (https://github.com/enricofer/geoprocessing_giscience_2019)

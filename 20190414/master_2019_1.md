@@ -1336,6 +1336,8 @@ def mapCenter(value1,feature, parent):
   return QgsGeometry.fromPointXY(QgsPointXY(x,y))
 ```
 
+---
+
 # ESERCITAZIONE PER CASA
 
 Scrivere una procedura per scansionare il contenuto di una cartella e caricare tutti gli shapefiles in essa contenuti in un unico archivio geopackage

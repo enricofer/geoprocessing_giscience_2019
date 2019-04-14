@@ -1340,15 +1340,12 @@ def mapCenter(value1,feature, parent):
 
 # ESERCITAZIONE PER CASA
 
-Scrivere una procedura per scansionare il contenuto di una cartella e caricare tutti gli shapefiles in essa contenuti in un unico archivio geopackage
-Spunti per lo svolgimento
+Scrivere una procedura per scansionare il contenuto di una cartella e caricare tutti gli shapefiles in essa contenuti in un unico archivio geopackage. Spunti per lo svolgimento
 
 - scansionare il contenuto di una directory con [os.listdir](https://code-maven.com/listing-a-directory-using-python)
 - estrarre l'estensione da un nome del file con [os.path.splitext](https://stackoverflow.com/questions/30438268/using-os-path-splitext-to-seperate-filename-and-extension)
 - controllare se l'estensione è .shp con if/then e nele caso
   - utilizzare la funzione [os.system](https://docs.python.org/3/library/os.html#os.system) o [subprocess.call](https://docs.python.org/3/library/subprocess.html#subprocess.call) per eseguire il comando [*ogr2ogr*](https://www.gdal.org/ogr2ogr.html) per la conversione degli shapefiles:
     - `ogr2ogr -append -f GPKG archivio.gpkg file.shp`
-
-*ogr2ogr* è un comando contenuto nella libreria GDAL che consente di manipolare e convertire files vettoriali da riga di comando
 
 Per difficoltà o chiarimenti postare nella sezione [ISSUES](https://github.com/enricofer/geoprocessing_giscience_2019/issues) del repository (https://github.com/enricofer/geoprocessing_giscience_2019)

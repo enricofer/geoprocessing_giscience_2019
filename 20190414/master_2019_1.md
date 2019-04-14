@@ -697,6 +697,46 @@ Una volta definita una classe è possibile .....
 
 ```python
 class stanza:
+
+    def __init__(self, lung, larg):
+        self.lung = lung
+        self.larg = larg
+        self.nome = "stanza"
+    def nome(self):
+        return self.nome
+    def area(self):
+        return self.lung * self.larg
+        
+class cucina(stanza):
+
+    def __init__(self, lung, larg):
+        super().__init__(lung, larg)
+        self.nome = "cucina"
+        
+class camera(stanza):
+
+    def __init__(self, lung, larg, abitante):
+        super().__init__(lung, larg)
+        self.nome = "bagno"
+        self.abitante = abitante
+        
+class edificio:
+
+    def __init__(self, stanze):
+        self.stanze = stanze
+        
+    def area_tot(self):
+        area = 0
+        for stanza in self.stanze:
+            area += stanza.area()
+        return area
+        
+    def abitanti(self):
+        ab = 0
+        for stanza in stanze:
+            if hasattr(stanza,'abitante'):
+                ab += 1
+        return ab
 ```
 
 --
@@ -795,6 +835,23 @@ scrittura e lettura di un file di testo
 
 ```python
 '''
+CORSO DI GEOPROCESSIGN - MASTER IN GISSCIENCE
+salvataggio di una stringa ad un file di testo
+'''
+
+import os
+
+testo = '''
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+Ut laoreet sem pellentesque ipsum rutrum consequat. Nunc iaculis tempor aliquet. 
+Fusce imperdiet pharetra tellus, ut commodo lacus gravida et.
+'''
+
+destinazione = r"C:\Users\paolo\Documenti"
+
+text_file = open(os.path.join(destinazione, 'mio_file.txt'), 'w')
+text_file.write(testo)
+text_file.close()
 ```
 
 [esercitazione2.py](py/esercitazione2.py)

@@ -1316,20 +1316,25 @@ def mapCenter(value1,feature, parent):
 
 ## funzione per il reverse geocoding con Nominatim API
 
-[Nominatim](https://nominatim.org/release-docs/develop/api/Reverse/) è un servizio di OSM per effettuare il geocoding
+[Nominatim](https://nominatim.org/release-docs/develop/api/Reverse/) è un servizio di OSM per effettuare il *geocoding*, ovvero la determinazione della localizzazione geografica a partire da un'indirizzo postale o il *reverse geocoding* ovvero la determinazione dell'indirizzo postale a partire dalla localizzazione geografica. In questo caso l'URL sara la seguente:
 
 https://nominatim.openstreetmap.org/reverse?format=json&accept-language=it-IT&zoom=18&lat=45.416558058596046&lon=11.875277236104012
+
+Come da parametri la risposta sarà in json, facimente convertibile in un dizionario python. Di seguito una funzione personalizzata che ricava l'indirizzo dalla geometria della  feature corrente.
 
 ```python
 from qgis.utils import iface
 from qgis.core import QgsGeometry, QgsPoint
 import requests
-
 @qgsfunction(args=0, group='Custom', usesgeometry=True)
 def reverse_geocode(value1,feature, parent):
-  x = iface.mapCanvas().extent().center().x()
-  y = iface.mapCanvas().extent().center().y()
-  return QgsGeometry.fromPointXY(QgsPointXY(x,y))
+    pos = feature.geometry().centroid().asPoint()
+    url = "https://nominatim.openstreetmap.org/reverse?format=json&accept-language=it-IT&zoom=18&lat={}&lon={}".format(pos.y(),pos.x())
+    response = requests.get(url)
+    if response.status_code == requests.codes.ok:
+        return "{}, {}".format(response.json()["address"]["road"], response.json()["address"]["city"])
+    else:
+        return ""
 ```
 
 ---

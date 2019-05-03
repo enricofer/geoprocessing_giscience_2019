@@ -706,31 +706,31 @@ class stanza:
         return self.nome
     def area(self):
         return self.lung * self.larg
-        
+
 class cucina(stanza):
 
     def __init__(self, lung, larg):
         super().__init__(lung, larg)
         self.nome = "cucina"
-        
+
 class camera(stanza):
 
     def __init__(self, lung, larg, abitante):
         super().__init__(lung, larg)
         self.nome = "bagno"
         self.abitante = abitante
-        
+
 class edificio:
 
     def __init__(self, stanze):
         self.stanze = stanze
-        
+
     def area_tot(self):
         area = 0
         for stanza in self.stanze:
             area += stanza.area()
         return area
-        
+
     def abitanti(self):
         ab = 0
         for stanza in stanze:
@@ -1029,7 +1029,7 @@ il modulo di collegamento (*bindings*) si chiama PyQt e può essere importato in
 [API in C++](https://qgis.org/api) - [API in python](https://qgis.org/pyqgis/) - [pyqgis per esempi](https://github.com/webgeodatavore/pyqgis-samples)
 
 * [QgisInterface](https://qgis.org/api/classQgisInterface.html): riferimenti dell'interfaccia utente:
-* [QgsProject.instance()](https://qgis.org/api/classQgisInterface.html):  gestisce l'oggetto progetto corrente.
+* [QgsProject.instance()](https://qgis.org/api/classQgsProject.html):  gestisce l'oggetto progetto corrente.
 * [QgsMapCanvas()](https://qgis.org/api/classQgsMapCanvas.html): è accessibile da QgisInterface().mapCanvas() e gestisce la visualizzazione dei layer: sistemi di riferimento, zoom/pan, mapTools etc...
 * [QgsLayerInterface()](http://qgis.org/api/2.18/classQgsLegendInterface.html): accessibile da QgisInterface().layerInterface() gestisce la legenda dei layers
 * [QgsMapLayer()](https://qgis.org/api/classQgsMapLayer.html): si articola in QgsVectorLayer() e QgsRasterLayer() e gestisce la manipolazione dei layers
@@ -1080,6 +1080,10 @@ vectorLayer = QgsVectorLayer('data_source', 'layer_name', 'provider_name') #prov
 rasterLayer = QgsRasterLayer('data_source', 'layer_name', 'provider_name') #provider_name = 'gdal' per sorgenti dati convenzionali
 
 QgsProject.instance().addMapLayer(vectorLayer) #QgsMapLayerRegistry
+
+#procedura per listare i layers presenti
+for layerName,layer in QgsProject.instance().mapLayers().items():
+    print(layerName, layer.name(),layer.extent())
 ```
 
 --
@@ -1245,58 +1249,30 @@ def trasp(t=0.5):
 
 --
 
-### procedura per stampare i dettagli di un layer
+### procedura per stampare i dettagli del layer corrente
 
 ```python
-#versione per QGIS2
-from qgis.core import QGis, QgsPoint
-#layer = iface.addVectorLayer("/path.shp", "nome", "ogr")
+from qgis.core import  QgsWkbTypes, QgsPointXY
 layer = iface.activeLayer() #caricamento
 if not layer or not layer.isValid():
-  print "Layer non valido!"
-else:
-    #QgsMapLayerRegistry.instance().addMapLayer(layer) #registrazione
-    informazioni=[]
-    for feature in layer.getFeatures(): #accesso alle features
-        info = [feature.id()]
-        geom = feature.geometry()
-        if geom.type() == QGis.Point:
-            info.append("distanza")
-            info.append(geom.distance(QgsGeometry.fromPoint(QgsPoint(0.0,0.0))))
-        elif geom.type() == QGis.Line:
-            info.append("Lunghezza")
-            info.append(geom.length())
-        elif geom.type() == QGis.Polygon:
-            info.append("Area")
-            info.append(geom.area)
-        info += feature.attributes()
-        informazioni.append(info)
-    print informazioni
-```
-
-```python
-#versione per QGIS3
-from qgis.core import  QgsWkbTypes, QgsPoint
-layer = iface.activeLayer() #caricamento
-if not layer or not layer.isValid():
-  print ("Layer non valido!")
-QgsProject.instance().addMapLayer(layer) #registrazione
+  print ("Layer non valido o non definito!")
 informazioni=[]
 for feature in layer.getFeatures(): #accesso alle features
-    info = [feature.id()]
+    info = str(feature.id())+": "
     geom = feature.geometry()
     if geom.type() ==  QgsWkbTypes.Point:
-        info.append("distanza")
-        info.append(geom.distance(QgsPoint(0,0)))
+        info += "Distanza "
+        info += str(geom.distance(QgsPoint(0,0)))
     elif geom.type() ==  QgsWkbTypes.LineString:
-        info.append("Lunghezza")
-        info.append(geom.length())
+        info += "Lunghezza "
+        info += str(geom.length())
     elif geom.type() ==  QgsWkbTypes.Polygon:
-        info.append("Area")
-        info.append(geom.area)
-    info += feature.attributes()
-    informazioni.append(info)
-print (informazioni)
+        info += "Area "
+        info += str(geom.area)
+    #info += ", ".join(list(map(lambda x: str(x),feature.attributes())))
+    for attribute in feature.attributes():
+        info += str(attribute)+', '
+    print (info)
 ```
 
 ---
@@ -1331,6 +1307,26 @@ from qgis.core import QgsGeometry, QgsPoint
 
 @qgsfunction(args=0, group='Custom')
 def mapCenter(value1,feature, parent):
+  x = iface.mapCanvas().extent().center().x()
+  y = iface.mapCanvas().extent().center().y()
+  return QgsGeometry.fromPointXY(QgsPointXY(x,y))
+```
+
+--
+
+## funzione per il reverse geocoding con Nominatim API
+
+[Nominatim](https://nominatim.org/release-docs/develop/api/Reverse/) è un servizio di OSM per effettuare il geocoding
+
+https://nominatim.openstreetmap.org/reverse?format=json&accept-language=it-IT&zoom=18&lat=45.416558058596046&lon=11.875277236104012
+
+```python
+from qgis.utils import iface
+from qgis.core import QgsGeometry, QgsPoint
+import requests
+
+@qgsfunction(args=0, group='Custom', usesgeometry=True)
+def reverse_geocode(value1,feature, parent):
   x = iface.mapCanvas().extent().center().x()
   y = iface.mapCanvas().extent().center().y()
   return QgsGeometry.fromPointXY(QgsPointXY(x,y))

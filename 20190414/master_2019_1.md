@@ -1350,3 +1350,22 @@ Scrivere una procedura per scansionare il contenuto di una cartella e caricare t
     - `ogr2ogr -append -f GPKG archivio.gpkg file.shp`
 
 Per difficoltà o chiarimenti postare nella sezione [ISSUES](https://github.com/enricofer/geoprocessing_giscience_2019/issues) del repository (https://github.com/enricofer/geoprocessing_giscience_2019)
+
+--
+## SOLUZIONE
+
+```python
+import os,sys, subprocess
+ 
+path = r'C:\Users\daniele\Desktop\Materiali_02.05\Risorse'
+  
+files = os.listdir(path)
+
+for name in files:
+	filename, file_extension = os.path.splitext(name)
+	if file_extension == '.shp':
+		proto_cmd = "ogr2ogr -append -f GPKG %s %s"
+		cmd = proto_cmd % (os.path.join(path,"archivio.gpkg"),os.path.join(path,name))
+		print (cmd)
+		subprocess.call(cmd)
+```

@@ -1352,6 +1352,7 @@ Scrivere una procedura per scansionare il contenuto di una cartella e caricare t
 Per difficoltà o chiarimenti postare nella sezione [ISSUES](https://github.com/enricofer/geoprocessing_giscience_2019/issues) del repository (https://github.com/enricofer/geoprocessing_giscience_2019)
 
 --
+
 ## SOLUZIONE
 
 ```python

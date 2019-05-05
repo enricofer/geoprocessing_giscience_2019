@@ -2,7 +2,15 @@
 
 ## Gli algoritmi di processing
 
-Processing è un'ambiente operativo di QGIS dove sono definiti degli algoritmi per la manipolazione di dati geospaziali. Il modello operativo su cui si basano è semplice: A partire da alcuni parametri di input si esegue l'elaborazione e si ottiengono dei dati in output.
+Processing è un'ambiente operativo di QGIS dove sono definiti degli algoritmi per la manipolazione di dati geospaziali. Il modello operativo su cui si basano è semplice: 
+
+- Definizione dei parametri di input 
+
+- Definizioni delle destinazioni dati in output
+
+- Implementazione dello script di processamento
+
+---
 
 ![](doc/processing_join_attrs.png)
 
@@ -20,19 +28,19 @@ Il Framework processing può essere facilmente esteso aggiungendo degli strument
 
 [Repertorio degli algoritmi predefiniti di QGIS3](https://github.com/qgis/QGIS/tree/master/python/plugins/processing/algs/qgis)
 
----
+--
 
 ## Tipi di parametri
 
-| Tipi di parametri (sintassi estesa)                                                                                                                                                 | Tipi di parametri (sintassi concisa) | descrizione                                                                          |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
-| [QgsProcessingParameterFeatureSource](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id67) | alg.SOURCE                           | Sorgente (INPUT)di dati vettoriale come utilizzabile come QgsVectorLayer             |
-| [QgsProcessingParameterFeatureSink](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id65)   | alg.SINK                             | Destinazione (OUTPUT) di dati Vettoriale scrivibile come successione di QgsFeature s |
-| [QgsProcessingParameterNumber](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id55)        | alg.NUMBER                           | Parametro numetico                                                                   |
-| [QgsProcessingParameterString](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id69)        | alg.STRING                           | Parametro alfanumerico                                                               |
-| [QgsProcessingParameterPoint](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id57)         | alg.POINT                            | Parametro Punto sul canvas                                                           |
-| [QgsProcessingParameterRasterLayer](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id61)   | alg.RASTER_LAYER                     | Sorgente(INPUT) di dati raster                                                       |
-| ......                                                                                                                                                                              |                                      |                                                                                      |
+| Tipi di parametri (sintassi estesa)                                                                       | Tipi di parametri (sintassi concisa) | descrizione                                                                          |
+| --------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| [QgsProcessingParameterFeatureSource](https://qgis.org/api/classQgsProcessingParameterFeatureSource.html) | alg.SOURCE                           | Sorgente (INPUT)di dati vettoriale come utilizzabile come QgsVectorLayer             |
+| [QgsProcessingParameterFeatureSink](https://qgis.org/api/classQgsProcessingParameterFeatureSink.html)     | alg.SINK                             | Destinazione (OUTPUT) di dati Vettoriale scrivibile come successione di QgsFeature s |
+| [QgsProcessingParameterNumber](https://qgis.org/api/classQgsProcessingParameterNumber.html)               | alg.NUMBER                           | Parametro numetico                                                                   |
+| [QgsProcessingParameterString](https://qgis.org/api/classQgsProcessingParameterString.html)               | alg.STRING                           | Parametro alfanumerico                                                               |
+| [QgsProcessingParameterPoint](https://qgis.org/api/classQgsProcessingParameterPoint.html)                 | alg.POINT                            | Parametro Punto sul canvas                                                           |
+| [QgsProcessingParameterRasterLayer](https://qgis.org/api/classQgsProcessingParameterRasterLayer.html)     | alg.RASTER_LAYER                     | Sorgente(INPUT) di dati raster                                                       |
+| ......                                                                                                    |                                      |                                                                                      |
 
 ---
 

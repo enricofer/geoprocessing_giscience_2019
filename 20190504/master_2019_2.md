@@ -32,6 +32,8 @@ Il Framework processing può essere facilmente esteso aggiungendo degli strument
 
 ## Tipi di parametri
 
+<!-- .slide: class="narrow" style="background-color:white"-->
+
 | Tipi di parametri (sintassi estesa)                                                                       | Tipi di parametri (sintassi concisa) | descrizione                                                                          |
 | --------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
 | [QgsProcessingParameterFeatureSource](https://qgis.org/api/classQgsProcessingParameterFeatureSource.html) | alg.SOURCE                           | Sorgente (INPUT)di dati vettoriale come utilizzabile come QgsVectorLayer             |

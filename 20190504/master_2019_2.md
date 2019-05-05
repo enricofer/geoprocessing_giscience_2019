@@ -1,6 +1,14 @@
 # Script di processing
 
+## Gli algoritmi di processing
+
+Processing è un'ambiente operativo di QGIS dove sono definiti degli algoritmi per la manipolazione di dati geospaziali. Il modello operativo su cui si basano è semplice: A partire da alcuni parametri di input si esegue l'elaborazione e si ottiengono dei dati in output.
+
+![](doc/processing_join_attrs.png)
+
 --
+
+## Personalizzazione degli algoritmi di processing
 
 Il Framework processing può essere facilmente esteso aggiungendo degli strumenti definiti con script di python che possono usufruire di una serie di interfacce e di servizi con un minimo di codice.
 
@@ -8,13 +16,27 @@ Il Framework processing può essere facilmente esteso aggiungendo degli strument
 
 [tutorial per QGIS2 - **SUPERATO**](http://www.qgistutorials.com/it/docs/processing_python_scripts.html)
 
-[template per un algoritmo di QGIS3](https://github.com/qgis/QGIS/blob/master/python/plugins/processing/script/ScriptTemplate.py)
+[processing script in QGIS3](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id61)
 
-[documentazione per QGIS3 - **INCOMPLETA**](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id61)
+[Repertorio degli algoritmi predefiniti di QGIS3](https://github.com/qgis/QGIS/tree/master/python/plugins/processing/algs/qgis)
 
-[Distribuire un plugin di processing](https://docs.qgis.org/testing/en/docs/pyqgis_developer_cookbook/processing.html)
+---
 
-[Accorgimenti per la scrittura di un plugin di processing](https://docs.qgis.org/testing/en/docs/user_manual/processing/scripts.html#id8)
+## Tipi di parametri
+
+| Tipi di parametri (sintassi estesa)                                                                                                                                                 | Tipi di parametri (sintassi concisa) | descrizione                                                                          |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ | ------------------------------------------------------------------------------------ |
+| [QgsProcessingParameterFeatureSource](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id67) | alg.SOURCE                           | Sorgente (INPUT)di dati vettoriale come utilizzabile come QgsVectorLayer             |
+| [QgsProcessingParameterFeatureSink](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id65)   | alg.SINK                             | Destinazione (OUTPUT) di dati Vettoriale scrivibile come successione di QgsFeature s |
+| [QgsProcessingParameterNumber](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id55)        | alg.NUMBER                           | Parametro numetico                                                                   |
+| [QgsProcessingParameterString](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id69)        | alg.STRING                           | Parametro alfanumerico                                                               |
+| [QgsProcessingParameterPoint](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id57)         | alg.POINT                            | Parametro Punto sul canvas                                                           |
+| [QgsProcessingParameterRasterLayer](https://github.com/qgis/QGIS-Documentation/blob/c1c228eb8a3ab4c5f72ef10f323070f64dd23056/source/docs/user_manual/processing/scripts.rst#id61)   | alg.RASTER_LAYER                     | Sorgente(INPUT) di dati raster                                                       |
+| ......                                                                                                                                                                              |                                      |                                                                                      |
+
+---
+
+# ESEMPI DI SCRIPT
 
 ---
 
